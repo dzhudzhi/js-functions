@@ -27,8 +27,311 @@
 <body>
 	<div class="reveal">
 		<div class="slides">
-			<section>Slide 1</section>
-			<section>Slide 2</section>
+			<section>
+				<h1>Scope & Functions</h1>
+				<span>by <a href="https://github.com/dzhudzhi">Anatoliy Dzhudzhiev</a></span>
+				<br>
+				<span>RS School graduate 2018 Q3</span>
+			</section>
+
+			<section>
+				<dl>
+					<dt>
+						<h3>Scope</h3>
+					</dt>
+					<dd>It's the language agnostic concept, to refer to the visibility of variables or functions to the executing
+						code</dd>
+				</dl>
+			</section>
+
+			<section>
+				<h3>Prototypal inheritance</h3>
+				<pre><code>let point = {
+	x: 10,
+	y: 20,
+}</code></pre>
+				<span class="fragment">Implicit property <code>__proto__</code></span>
+			</section>
+
+			<section>
+				<h3>Scope</h3>
+				<ul>
+					<li>Execution Context</li>
+					<li>Lexical Environment</li>
+				</ul>
+			</section>
+
+			<section>
+				<dl>
+					<dt>
+						<h3>Execution Context</h3>
+					</dt>
+					<dd>An execution context is a specification device that is used to track the runtime evaluation of the code.
+					</dd>
+				</dl>
+			</section>
+
+			<section>
+				<h4>There are several types of ECMAScript code:</h4>
+				<ul>
+					<li>the global code</li>
+					<li>function code</li>
+					<li>eval code</li>
+					<li>and module code</li>
+				</ul>
+			</section>
+
+			<section>
+				<span>Global code is all code outside of functions or code placed inside the <code>script</code>
+					tag</span>
+			</section>
+
+			<section>
+				<section>
+					<h3>Execution stack</h3>
+					<p>When a function is called, a new execution context is created, and pushed onto the stack — at this point it
+						becomes an active execution context. When a function returns, its context is popped from the stack.</p>
+				</section>
+				<section>
+					<pre><code>function recursive(flag) {
+
+	// Exit condition.
+	if (flag === 2) {
+		return;
+	}
+
+	// Call recursively.
+	recursive(++flag);
+}
+
+// Go.
+recursive(0);</code></pre>
+				</section>
+				<section>
+					<img src="/img/example-1.jpg" alt="Example of execution context stack">
+				</section>
+			</section>
+
+			<section>
+				<section>Every execution context has an associated lexical environment.</section>
+				<section>
+					<dl>
+						<dt>
+							<h3>Lexical Environment</h3>
+						</dt>
+						<dd>A lexical environment is a structure used to define association between identifiers appearing in the
+							context with their values. Each environment can have a reference to an optional parent environment.
+						</dd>
+					</dl>
+				</section>
+				<section>
+					<pre><code>let x = 10;
+let y = 20;
+
+function foo(z) {
+	let x = 100;
+	return x + y + z;
+}
+
+foo(30); // 150</code></pre>
+				</section>
+
+				<section>
+					<img src="/img/example-2.jpg" alt="Example of lexical environment">
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<dl>
+						<dt>
+							<h3>Identifier resolution</h3>
+						</dt>
+						<dd>The process of resolving a variable (binding) in an environment chain. An unresolved binding results to
+							ReferenceError.
+						</dd>
+					</dl>
+				</section>
+
+				<section>
+					<h3>Shadowing & Hoisting</h3>
+				</section>
+
+				<section>
+					<h3>Block Scope</h3>
+					<span>(let and const)</span>
+				</section>
+
+				<section>
+					<h3>IIFE</h3>
+					<p class="fragment">Immediately Invoking Function Expressions</p>
+					<pre class="fragment"><code>(function (arg0, arg1) {
+	// code
+})('arg', 1);</code></pre>
+				</section>
+			</section>
+
+			<section>
+				<h3>Closure</h3>
+			</section>
+
+			<section>
+				<dl>
+					<dt>
+						<h3>First-class function</h3>
+					</dt>
+					<dd>A function which can participate as a normal data: be stored in a variable, passed as an argument, or
+						returned as a value from another function.
+					</dd>
+				</dl>
+			</section>
+
+			<section>
+				<pre><code>let x = 10;
+
+function foo() {
+	console.log(x);
+}
+
+function bar(funArg) {
+	let x = 20;
+	funArg(); // 10, not 20!
+}
+
+// Pass foo as an argument to bar.
+bar(foo);</code></pre>
+			</section>
+
+			<section>
+				<dl>
+					<dt>
+						<h3>Static scope</h3>
+					</dt>
+					<dd>A language implements static scope, if only by looking at the source code one can determine in which
+						environment a binding is resolved.
+					</dd>
+				</dl>
+			</section>
+
+			<section>
+				<img src="/img/example-3.jpg" alt="Example of closure">
+			</section>
+
+			<section>
+				<pre><code>function foo() {
+	let x = 10;
+
+	// Closure, capturing environment of foo.
+	function bar() {
+		return x;
+	}
+
+	// Upward funarg.
+	return bar;
+}
+
+let x = 20;
+
+// Call to foo returns bar closure.
+let bar = foo();
+
+bar(); // 10, not 20!</code></pre>
+			</section>
+
+			<section>
+				<section>
+					<h3>This</h3>
+					<p>The this value is a special object which is dynamically and implicitly passed to the code of a context. We
+						can consider it as an implicit extra parameter, which we can access, but cannot mutate.</p>
+				</section>
+
+				<section>
+					<dl>
+						<dt>
+							<h3>This</h3>
+						</dt>
+						<dd>An implicit context object accessible from a code of an execution context — in order to apply the same
+							code for multiple objects.
+						</dd>
+					</dl>
+				</section>
+			</section>
+
+			<section>
+				<pre><code>class Point {
+	constructor(x, y) {
+		this._x = x;
+		this._y = y;
+	}
+
+	getX() {
+		return this._x;
+	}
+
+	getY() {
+		return this._y;
+	}
+}
+
+let p1 = new Point(1, 2);
+let p2 = new Point(3, 4);
+
+// Can access getX, and getY from
+// both instances (they are passed as this).
+
+console.log(
+	p1.getX(), // 1
+	p2.getX(), // 3
+);</code></pre>
+			</section>
+
+			<section>
+				Since only by looking at the source code of the foo function we cannot tell what value of this will it
+				have in a particular call, we say that this value is dynamically scoped.
+			</section>
+
+			<section>
+				<h3>call, apply, bind</h3>
+			</section>
+
+			<section>
+				<h3>Arrow functions</h3>
+				<p>The arrow functions are special in terms of this value: their this is lexical (static), but not dynamic. I.e.
+					their function environment record does not provide this value, and it’s taken from the parent environment.</p>
+			</section>
+
+			<section>
+				<pre><code>var x = 10;
+
+let foo = {
+	x: 20,
+
+	// Dynamic this.
+	bar() {
+		return this.x;
+	},
+
+	// Lexical this.
+	baz: () => this.x,
+
+	qux() {
+		// Lexical this within the invocation.
+		let arrow = () => this.x;
+
+		return arrow();
+	},
+};
+
+console.log(
+	foo.bar(), // 20, from foo
+	foo.baz(), // 10, from global
+	foo.qux(), // 20, from foo and arrow
+);</code></pre>
+			</section>
+
+			<section>
+				Arrow functions cannot be used as a constructor
+			</section>
 		</div>
 	</div>
 
